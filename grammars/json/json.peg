@@ -1,0 +1,56 @@
+
+package main
+
+type Parser Peg {
+ 
+}
+
+
+Start
+    <- Object? eof
+
+Object
+    <-  '{' Pair* '}' space*
+
+Pair       
+    <-  space* String ':' Value ','?
+
+Array
+    <-  '[' (Value (',' Value)* )? ']'
+
+Value 
+    <- space* (String
+       / Number
+       / Array
+       / True
+       / False
+       / Null
+       / Object)
+
+True   
+    <- "true" space*
+
+False  
+    <- "false" space*
+
+Null   
+    <- "null" space*
+
+String 
+    <- doublequote Char* doublequote space*
+
+Char   
+    <- (!doublequote !space .)*
+
+Number 
+    <- '0'
+       / [1-9] Digit* ('.' Digit*)? space*
+
+Digit  
+    <- [0-9]
+
+space           <- [ \r\n\t]
+backslash       <- '\\'
+doublequote     <- '"'
+eol             <- '\n'    
+eof             <- !.
