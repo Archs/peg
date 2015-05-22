@@ -1,0 +1,63 @@
+
+package main
+
+type Parser Peg {
+ 
+}
+
+
+Start
+    <- CommentedList* eof
+
+CommentedList
+    <- List
+
+List       
+    <-  begin_paren Operator (ws* Value)* end_paren
+
+Value 
+    <- True
+       / False
+       / Null
+       / String
+       / Number
+       / List
+
+Comment
+    <- ws* ';' (!Keywords !eol .)* eol
+
+Operator
+    <- Char*
+
+True   
+    <- "#t" 
+
+False  
+    <- "#f" 
+
+Null   
+    <- "nil" 
+
+String 
+    <- doublequote Char* doublequote 
+
+Char   
+    <- (!doublequote !ws !Keywords .)
+
+Number 
+    <- '0'
+       / [1-9] Digit* ('.' Digit*)?
+
+Digit  
+    <- [0-9]
+
+Keywords
+    <- [;]
+
+begin_paren     <- ws* "(" ws*
+end_paren       <- ws* ")" ws*
+ws              <- [ \r\n\t]
+backslash       <- '\\'
+doublequote     <- '"'
+eol             <- '\n'
+eof             <- !.
