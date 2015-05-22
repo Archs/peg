@@ -3,12 +3,13 @@
 # license that can be found in the LICENSE file.
 
 PEGNAME = ini
+EXT = .exe
 
-iniparser: $(PEGNAME).peg.go main.go
+$(PEGNAME)parser$(EXT): $(PEGNAME).peg.go main.go
 	go build -o $@
 
 $(PEGNAME).peg.go: $(PEGNAME).peg
-	../../peg -switch -inline $(PEGNAME).peg
+	peg -switch -inline $(PEGNAME).peg
 
 clean:
-	rm -f iniparser *.peg.go
+	rm -f $(PEGNAME)parser$(EXT) *.peg.go

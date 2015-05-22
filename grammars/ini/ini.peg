@@ -8,30 +8,50 @@ type Ini Peg {
  
 }
 
-INI <- Line* EOF 
+Start 
+	<- Block* EOF 
 
-Line <- Assigment / EOL / BlockHeader
+Block
+	<- Space* BlockHeader? Assigment+
 
-BlockHeader <- Space* BracketOpen <Identifier> BracketClose EOL {println("Block:", text)}
-BracketOpen <- '[' Space*
-BracketClose <- ']' Space*
+BlockHeader 
+	<- Space* BracketOpen <Identifier> BracketClose {println("Block:", text)}
 
-Assigment <- Space* <Identifier EqualSign Value> EOL? {println("Assignment:", text)}
+BracketOpen 
+	<- '[' Space*
 
-Identifier <- !Keyword IdNondigit IdChar* Space*
+BracketClose 
+	<- ']' Spacing*
 
-IdNondigit <- [a-z] / [A-Z] / [_]
+Assigment 
+	<- Space* <Identifier EqualSign Value> {println("Assignment:", text)}
 
-IdChar <- [a-z] / [A-Z] / [0-9] / [_]
+Identifier 
+	<- !Keyword IdNondigit IdChar* Space*
 
-EqualSign <- '=' Space*
+IdNondigit 
+	<- [a-z] / [A-Z] / [_]
 
-Value <- (!Space !EOF !EOL !Keyword .)* Space*
+IdChar 
+	<- [a-z] / [A-Z] / [0-9] / [_]
 
-Keyword <- '=' / '[' / ']'
+EqualSign 
+	<- '=' Space*
 
-Space <- [ \t\r]
+Value 
+	<- (!Space !EOF !EOL !Keyword .)* Spacing*
 
-EOL <- '\n'
+Keyword
+	<- '=' / '[' / ']'
 
-EOF <- !.
+Spacing
+	<- Space / EOL
+
+Space
+	<- [ \t\r]
+
+EOL
+	<- '\n'
+
+EOF
+	<- !.
