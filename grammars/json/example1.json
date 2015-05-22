@@ -1,6 +1,8 @@
-{
+
+
+{ 
     "Number": 42,
-    "Decimal": 123.456,
+    "Decimal": 123.123,
     "String": "abc",
     "NullString": "",
     "Escape": "Hello",
@@ -12,3 +14,5 @@
     "Null"  : null,
     "Empty" : {}
 }
+
+

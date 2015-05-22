@@ -7,50 +7,56 @@ type Parser Peg {
 
 
 Start
-    <- Object? eof
+    <- Value eof
 
 Object
-    <-  '{' Pair* '}' space*
+    <-  begin_object (Pair (value_separator Pair)* )? end_object
 
 Pair       
-    <-  space* String ':' Value ','?
+    <-  String name_separator Value
 
 Array
-    <-  '[' (Value (',' Value)* )? ']'
+    <-  begin_array (Value (value_separator Value)* )? end_array
 
 Value 
-    <- space* (String
-       / Number
-       / Array
-       / True
+    <- True
        / False
        / Null
-       / Object)
+       / String
+       / Number
+       / Array
+       / Object
 
 True   
-    <- "true" space*
+    <- "true" 
 
 False  
-    <- "false" space*
+    <- "false" 
 
 Null   
-    <- "null" space*
+    <- "null" 
 
 String 
-    <- doublequote Char* doublequote space*
+    <- doublequote Char* doublequote 
 
 Char   
-    <- (!doublequote !space .)*
+    <- (!doublequote .)
 
 Number 
     <- '0'
-       / [1-9] Digit* ('.' Digit*)? space*
+       / [1-9] Digit* ('.' Digit*)?
 
 Digit  
     <- [0-9]
 
-space           <- [ \r\n\t]
+begin_array     <- ws "[" ws
+begin_object    <- ws "{" ws
+end_array       <- ws "]" ws
+end_object      <- ws "}" ws
+name_separator  <- ws ":" ws
+value_separator <- ws "," ws
+ws           <- [ \r\n\t]*
 backslash       <- '\\'
 doublequote     <- '"'
-eol             <- '\n'    
+eol             <- '\n'
 eof             <- !.
