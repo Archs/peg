@@ -9,25 +9,25 @@ type Ini Peg {
 }
 
 Start 
-	<- Block* EOF 
+	<- Block* LineComment* EOF 
 
 Block
 	<- Space* BlockHeader? Assigment+
 
 BlockHeader 
-	<- Space* BracketOpen <Identifier> BracketClose {println("Block:", text)}
+	<- BracketOpen <Identifier> BracketClose {println("Block:", text)}
 
 BracketOpen 
-	<- '[' Space*
+	<- Space* '[' Space*
 
-BracketClose 
-	<- ']' Spacing*
+BracketClose
+	<- Space* ']' Space* Comment? EOL+
 
-Assigment 
-	<- Space* <Identifier EqualSign Value> {println("Assignment:", text)}
+Assigment
+	<- Space* Identifier EqualSign Value Space* Comment? EOL*
 
 Identifier 
-	<- !Keyword IdNondigit IdChar* Space*
+	<- !Keyword IdNondigit IdChar*
 
 IdNondigit 
 	<- [a-z] / [A-Z] / [_]
@@ -36,16 +36,19 @@ IdChar
 	<- [a-z] / [A-Z] / [0-9] / [_]
 
 EqualSign 
-	<- '=' Space*
+	<- Space* '=' Space*
 
 Value 
-	<- (!Space !EOF !EOL !Keyword .)* Spacing*
+	<- (!Keyword !Space !EOL .)*
 
 Keyword
-	<- '=' / '[' / ']'
+	<- [=\[\]#]
 
-Spacing
-	<- Space / EOL
+LineComment
+	<- Comment EOL*
+
+Comment
+	<- '#' (!'#' !EOL .)*
 
 Space
 	<- [ \t\r]
