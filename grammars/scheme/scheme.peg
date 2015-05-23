@@ -7,10 +7,7 @@ type Parser Peg {
 
 
 Start
-    <- Line* eof
-
-Line
-    <- Comment / ListWithComment
+    <- (Comment / ListWithComment)* eof
 
 ListWithComment
     <- List Comment?
