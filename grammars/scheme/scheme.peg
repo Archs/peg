@@ -54,8 +54,8 @@ Digit
 Keywords
     <- [;#]
 
-begin_paren     <- ws* "(" ws*
-end_paren       <- ws* ")" ws*
+begin_paren     <- spacing* "(" spacing*
+end_paren       <- spacing* ")" spacing*
 ws              <- [ \r\n\t]
 spacing         <- ws / Comment
 backslash       <- '\\'
