@@ -5,12 +5,8 @@ type Parser Peg {
  
 }
 
-
 Start
-    <- (Comment / ListWithComment)* eof
-
-ListWithComment
-    <- List Comment?
+    <- (Comment / List Comment?)* eof
 
 List       
     <-  begin_paren Operator (ws* Value)* end_paren
@@ -27,7 +23,7 @@ Comment
     <- space* ';' (!eol .)* ws*
 
 Operator
-    <- Char*
+    <- char*
 
 True   
     <- "#t" 
@@ -39,9 +35,9 @@ Null
     <- "nil" 
 
 String 
-    <- doublequote Char* doublequote 
+    <- doublequote char* doublequote 
 
-Char   
+char   
     <- (!doublequote !ws !Keywords .)
 
 Number 
