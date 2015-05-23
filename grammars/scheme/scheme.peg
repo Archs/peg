@@ -10,10 +10,10 @@ Start
     <- Line* eof
 
 Line
-    <- Comment / ValueWithComment
+    <- Comment / ListWithComment
 
-ValueWithComment
-    <- Value Comment?
+ListWithComment
+    <- List Comment?
 
 List       
     <-  begin_paren Operator (ws* Value)* end_paren
