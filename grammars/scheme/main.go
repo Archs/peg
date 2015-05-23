@@ -28,7 +28,8 @@ func main() {
 	if err := parser.Parse(); err != nil {
 		log.Fatal(err)
 	}
-	parser.PrintSyntaxTree()
+	// parser.PrintSyntaxTree()
 	parser.Execute()
-	parser.PrintLists()
+	// parser.PrintLists()
+	parser.EvalAll()
 }

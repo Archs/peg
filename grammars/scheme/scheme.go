@@ -16,13 +16,10 @@ const (
 	TOP
 )
 
-var ()
-
 type Value struct {
 	s        *Scheme
 	Type     int
 	val      string
-	operator *Value
 	operands []*Value
 }
 
@@ -87,15 +84,20 @@ func (s *Scheme) Init() {
 	s.lists = make([]*Value, 0)
 	s.stack = list.New()
 	s.opmaper = make(map[string]func(args ...*Value) *Value)
+	s.initOps()
 }
 
 func (s *Scheme) Apply(list *Value) (*Value, error) {
-	op := list.operator.Eval()
+	op := list.operands[0]
 	fn, ok := s.opmaper[op.String()]
 	if !ok {
 		return nil, errors.New("no operator " + op.String() + " found")
 	}
-	return fn(list.operands...), nil
+	args := []*Value{}
+	for _, v := range list.operands[1:] {
+		args = append(args, v.Eval())
+	}
+	return fn(args...), nil
 }
 
 func (s *Scheme) NewList() *Value {
@@ -107,7 +109,7 @@ func (s *Scheme) NewList() *Value {
 }
 
 func (s *Scheme) BeginList() {
-	println("begin list")
+	// println("begin list")
 	if s.current != nil {
 		s.stack.PushBack(s.current)
 	}
@@ -115,7 +117,7 @@ func (s *Scheme) BeginList() {
 }
 
 func (s *Scheme) EndList(sval string) {
-	println("end list")
+	// println("end list")
 	s.current.val = sval
 	el := s.stack.Back()
 	if el == nil {
@@ -185,17 +187,19 @@ func (s *Scheme) NewNil(sval string) {
 	s.current.add(nv)
 }
 
-func (s *Scheme) println(sval string) {
-	println(sval)
-}
-
 func (s *Scheme) PrintLists() {
 	for _, v := range s.lists {
-		println(v.String())
 		print("content:")
 		for _, sv := range v.operands {
 			print(sv.String(), " ")
 		}
 		println()
 	}
+}
+
+func (s *Scheme) EvalAll() (ret *Value) {
+	for _, v := range s.lists {
+		ret = v.Eval()
+	}
+	return
 }

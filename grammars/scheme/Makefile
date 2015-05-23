@@ -5,7 +5,7 @@
 PEGNAME = scheme
 EXT = .exe
 
-$(PEGNAME)$(EXT): $(PEGNAME).peg.go main.go scheme.go
+$(PEGNAME)$(EXT): $(PEGNAME).peg.go main.go scheme.go scheme_ops.go
 	go build -o $@
 
 $(PEGNAME).peg.go: $(PEGNAME).peg
