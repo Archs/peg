@@ -5,4 +5,9 @@
 
 ;asdfafd
 
-(strcat "asdfas" "asdfadsf")
+(strcat "asdfas" #\a 
+	;asdfadsf
+	"asdfadsf";asdfasdf)
+)
+
+(+ #\a )
