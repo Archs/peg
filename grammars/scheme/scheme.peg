@@ -15,6 +15,7 @@ Value
     <- True
        / False
        / Null
+       / Character
        / String
        / Number
        / List
@@ -35,7 +36,10 @@ Null
     <- "nil" 
 
 String 
-    <- doublequote char* doublequote 
+    <- doublequote char* doublequote
+
+Character
+    <- "#\\" char
 
 char   
     <- (!doublequote !ws !Keywords .)
@@ -48,7 +52,7 @@ Digit
     <- [0-9]
 
 Keywords
-    <- [;]
+    <- [;#]
 
 begin_paren     <- ws* "(" ws*
 end_paren       <- ws* ")" ws*
