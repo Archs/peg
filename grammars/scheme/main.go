@@ -30,5 +30,5 @@ func main() {
 	}
 	parser.PrintSyntaxTree()
 	parser.Execute()
-	parser.PrintAST()
+	parser.PrintLists()
 }
