@@ -120,6 +120,7 @@ func (s *Scheme) EndList(sval string) {
 	el := s.stack.Back()
 	if el == nil {
 		s.lists = append(s.lists, s.current)
+		s.current = nil
 	} else {
 		parent := el.Value.(*Value)
 		// add new list to parent list
@@ -188,7 +189,7 @@ func (s *Scheme) println(sval string) {
 	println(sval)
 }
 
-func (s *Scheme) PrintAST() {
+func (s *Scheme) PrintLists() {
 	for _, v := range s.lists {
 		println(v.String())
 		print("content:")
