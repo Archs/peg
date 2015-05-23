@@ -9,7 +9,7 @@ Start
     <- (Comment / List Comment?)* eof
 
 List       
-    <-  begin_paren Operator (ws* Value)* end_paren
+    <-  begin_paren Operator (spacing* Value)* end_paren
 
 Value 
     <- True
@@ -21,7 +21,7 @@ Value
        / List
 
 Comment
-    <- space* ';' (!eol .)* ws*
+    <- ws* ';' (!eol .)* eol
 
 Operator
     <- char*
@@ -57,7 +57,7 @@ Keywords
 begin_paren     <- ws* "(" ws*
 end_paren       <- ws* ")" ws*
 ws              <- [ \r\n\t]
-space           <- [ \r\t]
+spacing         <- ws / Comment
 backslash       <- '\\'
 doublequote     <- '"'
 eol             <- '\n'
