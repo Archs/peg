@@ -2,19 +2,19 @@
 package main
 
 type Parser Peg {
- 
+    Scheme
 }
 
 Start
     <- (Comment / List Comment?)* eof
 
 List       
-    <-  begin_paren Operator (spacing* Value)* end_paren
+    <-  <begin_paren Operator (spacing* Value)* end_paren> {p.EndList(text)}
 
 Value 
     <- True
        / False
-       / Null
+       / Nil
        / Character
        / String
        / Number
@@ -24,29 +24,29 @@ Comment
     <- ws* ';' (!eol .)* eol
 
 Operator
-    <- char*
+    <- <char*> {p.NewOP(text)}
 
 True   
-    <- "#t" 
+    <- <"#t"> {p.NewBool(text)}
 
 False  
-    <- "#f" 
+    <- <"#f"> {p.NewBool(text)}
 
-Null   
-    <- "nil" 
+Nil   
+    <- <"nil"> {p.NewNil(text)}
 
 String 
-    <- doublequote char* doublequote
+    <- doublequote <char*> doublequote {p.NewString(text)}
 
 Character
-    <- "#\\" char
+    <- "#\\" <char> {p.NewChar(text)}
 
 char   
     <- (!doublequote !ws !Keywords .)
 
 Number 
-    <- '0'
-       / [1-9] Digit* ('.' Digit*)?
+    <- <'0'
+       / [1-9] Digit* ('.' Digit*)?> {p.NewNumber(text)}
 
 Digit  
     <- [0-9]
@@ -54,8 +54,8 @@ Digit
 Keywords
     <- [;#]
 
-begin_paren     <- spacing* "(" spacing*
-end_paren       <- spacing* ")" spacing*
+begin_paren     <- spacing* "(" spacing* {p.BeginList()}
+end_paren       <- spacing* ")" spacing* 
 ws              <- [ \r\n\t]
 spacing         <- ws / Comment
 backslash       <- '\\'

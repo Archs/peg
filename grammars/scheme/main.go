@@ -23,9 +23,12 @@ func main() {
 		log.Fatal(err)
 	}
 	parser := &Parser{Buffer: string(dat)}
+	parser.Scheme.Init()
 	parser.Init()
 	if err := parser.Parse(); err != nil {
 		log.Fatal(err)
 	}
 	parser.PrintSyntaxTree()
+	parser.Execute()
+	parser.PrintAST()
 }
