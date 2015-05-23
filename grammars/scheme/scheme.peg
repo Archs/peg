@@ -7,10 +7,13 @@ type Parser Peg {
 
 
 Start
-    <- CommentedList* eof
+    <- Line* eof
 
-CommentedList
-    <- List
+Line
+    <- Comment / ValueWithComment
+
+ValueWithComment
+    <- Value Comment?
 
 List       
     <-  begin_paren Operator (ws* Value)* end_paren
@@ -24,7 +27,7 @@ Value
        / List
 
 Comment
-    <- ws* ';' (!Keywords !eol .)* eol
+    <- space* ';' (!eol .)* ws*
 
 Operator
     <- Char*
@@ -57,6 +60,7 @@ Keywords
 begin_paren     <- ws* "(" ws*
 end_paren       <- ws* ")" ws*
 ws              <- [ \r\n\t]
+space           <- [ \r\t]
 backslash       <- '\\'
 doublequote     <- '"'
 eol             <- '\n'
