@@ -1,0 +1,37 @@
+# Copyright 2010 The Go Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+package main
+
+type Ini Peg {
+ 
+}
+
+INI <- Line* EOF 
+
+Line <- Assigment / EOL / BlockHeader
+
+BlockHeader <- Space* BracketOpen <Identifier> BracketClose EOL {println("Block:", text)}
+BracketOpen <- '[' Space*
+BracketClose <- ']' Space*
+
+Assigment <- Space* <Identifier EqualSign Value> EOL? {println("Assignment:", text)}
+
+Identifier <- !Keyword IdNondigit IdChar* Space*
+
+IdNondigit <- [a-z] / [A-Z] / [_]
+
+IdChar <- [a-z] / [A-Z] / [0-9] / [_]
+
+EqualSign <- '=' Space*
+
+Value <- (!Space !EOF !EOL !Keyword .)* Space*
+
+Keyword <- '=' / '[' / ']'
+
+Space <- [ \t\r]
+
+EOL <- '\n'
+
+EOF <- !.
