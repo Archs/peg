@@ -6,7 +6,7 @@ type Parser Peg {
 }
 
 Start
-    <- (Comment / List Comment?)* eof
+    <- (Comment / List)* eof
 
 List       
     <-  <begin_paren Operator (spacing* Value)* end_paren> {p.EndList(text)}
