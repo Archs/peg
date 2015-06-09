@@ -9,10 +9,11 @@ Start
     <- (Comment / List)* eof
 
 List       
-    <-  <begin_paren Operator (spacing* Value)* end_paren> {p.EndList(text)}
+    <-  <begin_paren Value (spacing* Value)* end_paren> {p.EndList(text)}
 
 Value 
-    <- True
+    <- Identifier
+       / True
        / False
        / Nil
        / Character
@@ -23,8 +24,11 @@ Value
 Comment
     <- ws* ';' (!eol .)* eol
 
-Operator
-    <- <char*> {p.NewOP(text)}
+Identifier
+    <- !Keywords !Digit <IdChar*> {p.NewIdentifier(text)}
+
+IdChar
+    <- (!Keywords !ws .)
 
 True   
     <- <"#t"> {p.NewBool(text)}
@@ -52,7 +56,7 @@ Digit
     <- [0-9]
 
 Keywords
-    <- [;#]
+    <- [;#()]
 
 begin_paren     <- spacing* "(" spacing* {p.BeginList()}
 end_paren       <- spacing* ")" spacing* 

@@ -13,7 +13,7 @@ const (
 	TString
 	TNumber
 	TList
-	TOP
+	TID // Identifier
 )
 
 type Value struct {
@@ -61,7 +61,9 @@ func (v *Value) Number() float64 {
 
 func (v *Value) Eval() *Value {
 	switch v.Type {
-	case TBool, TChar, TString, TNumber, TOP:
+	case TBool, TChar, TString, TNumber:
+		return v
+	case TID:
 		return v
 	case TList:
 		val, err := v.s.Apply(v)
@@ -169,9 +171,9 @@ func (s *Scheme) NewNumber(sval string) {
 	s.current.add(nv)
 }
 
-func (s *Scheme) NewOP(sval string) {
+func (s *Scheme) NewIdentifier(sval string) {
 	nv := &Value{
-		Type: TOP,
+		Type: TID,
 		val:  sval,
 		s:    s,
 	}
