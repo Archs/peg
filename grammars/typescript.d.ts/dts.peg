@@ -64,9 +64,6 @@ FuncType
 	   paren_end 
 	   ( FuncReturn / TypeSeperator) Type
 
-FuncReturn
-	<- '=>' spacing*
-
 ArrayType
 	<- identifier '[]'
 
@@ -75,6 +72,9 @@ VariableDifinition
 
 TypeSeperator
 	<- ':' spacing*
+
+FuncReturn
+	<- '=>' spacing*
 
 ArgumentSeperator
 	<- ',' spacing*
