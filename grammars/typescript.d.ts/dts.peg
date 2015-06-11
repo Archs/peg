@@ -11,18 +11,19 @@ ModuleDeclaration
 
 ModuleBody
 	<- block_start 
-			WORD+
-			#ClassDeclaration* 
-			#VariableDeclaration* 
-			#FuncDeclaration* 
-			#ModuleDeclaration*
+			ClassDeclaration*
+			VariableDeclaration*
+			FuncDeclaration*
 	   block_end
 
 ClassDeclaration
 	<- modifier? 'class' spacing identifier ExtendClause? ImplementClause? ClassBody
 
 ClassBody
-	<- block_start VariableDeclaration* FuncDeclaration* block_end
+	<- block_start 
+			VariableDeclaration* 
+			FuncDeclaration* 
+	   block_end
 
 ExtendClause
 	<- 'extends' identifier spacing*
@@ -31,7 +32,7 @@ ImplementClause
 	<- 'implements' identifier spacing*
 
 VariableDeclaration
-	<- modifier? VariableType ';' spacing*
+	<- modifier? VariableDifinition ';' spacing*
 
 FuncDeclaration
 	<- modifier? identifier FuncType ';' spacing*
@@ -52,15 +53,16 @@ paren_end
 	<- ')' spacing*
 
 modifier
-	<- ('declare' / 'export') spacing*
+	<- ('declare' / 'export' / 'private' / 'static') spacing*
 
 Type
-	<- ('number' / 'boolean' / 'string' / FuncType / ArrayType) spacing*
+	<- ('number' / 'boolean' / 'string' / 'Function' / FuncType / ArrayType) spacing*
 
 FuncType
 	<- paren_start 
-			VariableType? (ArgumentSeperator VariableType)* 
-	   paren_end FuncReturn Type
+			VariableDifinition? (ArgumentSeperator VariableDifinition)* 
+	   paren_end 
+	   ( FuncReturn / TypeSeperator) Type
 
 FuncReturn
 	<- '=>' spacing*
@@ -68,8 +70,8 @@ FuncReturn
 ArrayType
 	<- identifier '[]'
 
-VariableType
-	<- identifier ':' Type
+VariableDifinition
+	<- identifier TypeSeperator Type
 
 TypeSeperator
 	<- ':' spacing*
@@ -78,14 +80,14 @@ ArgumentSeperator
 	<- ',' spacing*
 
 keywords
-	<- ('module' / 'class' / 'interface' / 'extends' / 'implements' / 'private' / 'static'
-		/ 'boolean' / 'number' / 'string' / 'void' / 'Function') spacing*
+	<- ('module' / 'class' / 'interface' / 'extends' / 'implements'
+		/ 'boolean' / 'number' / 'string' / 'void') spacing*
 
 identifier
-	<- (!keywords !modifier ([a-z]/[A-Z]/[_]) ([a-z]/[A-Z]/[0-9]/[_?])*) spacing*
+	<- (!keywords !modifier !separator ([a-z]/[A-Z]/[_]) ([a-z]/[A-Z]/[0-9]/[_?.])*) spacing*
 
 separator
-	<- [:;(){},\[\].=>]+ spacing*
+	<- [:;(){},\[\].=>]
 
 comment
 	<- '//' (!eol .)* eol

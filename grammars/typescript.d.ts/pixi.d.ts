@@ -1,6 +1,5 @@
 declare module PIXI {
 
-    //https://github.com/primus/eventemitter3
     export class EventEmitter {
 
         listeners(event: string): Function[];
@@ -15,15 +14,8 @@ declare module PIXI {
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////CORE//////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////
-
-    //display
-
     export class DisplayObject extends EventEmitter implements interaction.InteractiveTarget {
 
-        //begin extras.cacheAsBitmap
         private _cacheAsBitmap: boolean;
         private _originalUpdateTransform: boolean;
         private _originalHitTest: any;
@@ -35,7 +27,6 @@ declare module PIXI {
         private _getCachedBounds(): Rectangle;
         private _destroyCachedDisplayObject(): void;
         private _cacheAsBitmapDestroy(): void;
-        //end extras.cacheAsBitmap
 
         private _sr: number;
         private _cr: number;
@@ -103,91 +94,6 @@ declare module PIXI {
 
 
     }
-    //////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////INTERACTION///////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////
-
-    export module interaction {
-        export interface InteractionEvent {
-
-            stopped: boolean;
-            target: any;
-            type: string;
-            data: InteractionData;
-            stopPropagation(): void;
-
-        }
-
-        export class InteractionData {
-
-            global: Point;
-            target: DisplayObject;
-            originalEvent: Event;
-
-            getLocalPosition(displayObject: DisplayObject, point?: Point, globalPos?: Point): Point;
-
-        }
-
-        export class InteractionManager {
-
-            private interactionDOMElement: HTMLElement;
-            private eventsAdded: boolean;
-            private _tempPoint: Point;
-
-            private setTargetElement(element: HTMLElement, resolution: number): void;
-            private addEvents(): void;
-            private removeEvents(): void;
-            private dispatchEvent(displayObject: DisplayObject, eventString: string, eventData: any): void;
-            private onMouseDown: (event: Event) => void;
-            private processMouseDown: (displayObject: DisplayObject, hit: boolean) => void;
-            private onMouseUp: (event: Event) => void;
-            private processMouseUp: (displayObject: DisplayObject, hit: boolean) => void;
-            private onMouseMove: (event: Event) => void;
-            private processMouseMove: (displayObject: DisplayObject, hit: boolean) => void;
-            private onMouseOut: (event: Event) => void;
-            private processMouseOverOut: (displayObject: DisplayObject, hit: boolean) => void;
-            private onTouchStart: (event: Event) => void;
-            private processTouchStart: (DisplayObject: DisplayObject, hit: boolean) => void;
-            private onTouchEnd: (event: Event) => void;
-            private processTouchEnd: (displayObject: DisplayObject, hit: boolean) => void;
-            private onTouchMove: (event: Event) => void;
-            private processTouchMove: (displayObject: DisplayObject, hit: boolean) => void;
-            private getTouchData(touchEvent: InteractionData): InteractionData;
-            private returnTouchData(touchData: InteractionData): void;
-
-            autoPreventDefault: boolean;
-            interactionFrequency: number;
-            mouse: InteractionData;
-            eventData: {
-                stopped: boolean;
-                target: any;
-                type: any;
-                data: InteractionData;
-            };
-            interactiveDataPool: InteractionData[];
-            last: number;
-            currentCursorStyle: string;
-            resolution: number;
-            update(deltaTime: number): void;
-
-            mapPositionToPoint(point: Point, x: number, y: number): void;
-            processInteractive(point: Point, displayObject: DisplayObject, func: (displayObject: DisplayObject, hit: boolean) => void, hitTest: boolean, interactive: boolean): boolean;
-            destroy(): void;
-
-        }
-
-        export interface InteractiveTarget {
-
-            interactive: boolean;
-            buttonMode: boolean;
-            interactiveChildren: boolean;
-            defaultCursor: string;
-
-        }
-
-    }
-
-    //math
 
     export class Point {
 
