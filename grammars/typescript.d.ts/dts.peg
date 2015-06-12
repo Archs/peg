@@ -42,6 +42,7 @@ Type
 
 BasicType
 	<- ObjectType 
+		/ ArrayType
 		/ FuncType 
 		/ "number" 
 		/ "boolean"
@@ -49,7 +50,7 @@ BasicType
 		/ "function"
 		/ "any"
 		/ LiteralType
-		/ identifier '[]'?
+		/ identifier
 
 FuncType
 	<- paren_start 
@@ -58,13 +59,13 @@ FuncType
 	   (( FuncReturn / TypeSeperator) Type)?
 
 ArrayType
-	<-  "number" 
+	<-  ("number" 
 		/ "boolean"
 		/ "string"
 		/ "function"
 		/ "Function"
 		/ "any"
-		/ identifier '[]'
+		/ identifier) '[]'
 
 ObjectType
 	<- block_start
