@@ -11,7 +11,6 @@ declare module PIXI {
     export class EventEmitter {
 
         listeners(event: string): Function;
-        emit(event: string, ...args: any[]): boolean;
         on(event: 'click', context?: any): EventEmitter; 
         on(event: string, fn: Function, context?: any): EventEmitter;
         once(event: string, fn: Function, context?: any): EventEmitter;
