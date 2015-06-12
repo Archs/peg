@@ -4,7 +4,7 @@ type Parser Peg {
 }
 
 start
-	<- (ModuleDeclaration / ClassDeclaration)+ eof
+	<- SPACE (ModuleDeclaration / ClassDeclaration)+ eof
 
 ModuleDeclaration
 	<- modifier? 'module' SPACE identifier ModuleBody
@@ -48,6 +48,7 @@ BasicType
 		/ "string"
 		/ "function"
 		/ "any"
+		/ LiteralType
 		/ identifier '[]'?
 
 FuncType
@@ -69,6 +70,9 @@ ObjectType
 	<- block_start
 			VariableDeclaration*
 	   block_end
+
+LiteralType
+	<- ['] identifier [']
 
 VariableDifinition
 	<- identifier TypeSeperator Type
@@ -93,13 +97,19 @@ modifier
 	<- (('declare' / 'export' / 'private' / 'static') SPACE)+
 
 identifier
-	<- ([a-z]/[A-Z]/[_.]) ([a-z]/[A-Z]/[0-9]/[_?]/'.')*
+	<- ([[A-Z]]/[_.]) ([[A-Z]]/[0-9]/[_?.])*
 
 separator
 	<- [:;(){},\[\]=>]
 
-comment
+Comment
+	<- LineComment / BlockComment
+
+LineComment
 	<- '//' (!eol .)* eol
+
+BlockComment
+	<- '/*' (!'*/' .)* '*/'
 
 block_start
 	<- SPACE '{' SPACE
@@ -117,6 +127,6 @@ SPACE
 	<- spacing* 
 
 ws				<- [ \t\n\r]
-spacing         <- [ \t\n\r] / comment
+spacing         <- [ \t\n\r] / Comment
 eol             <- '\n'
 eof             <- !.
