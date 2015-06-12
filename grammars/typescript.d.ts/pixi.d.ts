@@ -1,3 +1,10 @@
+/**
+ * Pixi v3.0.6 Commit History Reviewed: 25/May
+ *
+ * https://github.com/GoodBoyDigital/pixi.js/
+ *
+ * The definitions will follow the Dev Branch for now.
+ */
 declare module PIXI {
 
     //https://github.com/primus/eventemitter3
@@ -52,7 +59,13 @@ declare module PIXI {
         private _cachedObject: any;
 
         updateTransform(): void;
-
+/**
+ * Pixi v3.0.6 Commit History Reviewed: 25/May
+ *
+ * https://github.com/GoodBoyDigital/pixi.js/
+ *
+ * The definitions will follow the Dev Branch for now.
+ */
         position: Point;
         scale: Point;
         pivot: Point;
